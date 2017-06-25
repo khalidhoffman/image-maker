@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "preinstall": "mkdir ./public/assets/",
+    "preinstall": "mkdir -p ./public/assets/",
     "start": "node ./bin/www",
     "compile:js": "webpack --display-reasons --config ./webpack.config.js"
   },
