@@ -36,6 +36,9 @@ router.post('/', (req, res, next) => {
 			parentImage.addChild(image);
 		}
 
+		if (imageParams.styles){
+			image.styles = imageParams.styles;
+		}
 
 		return image;
 	});

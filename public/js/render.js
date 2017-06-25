@@ -57881,15 +57881,10 @@ var ImageView = function (_React$Component) {
 
 		_this.image = props.image || new _image2.default(props);
 		_this.images = props.images || props.children || [];
-		_this.styles = props.styles || [];
 
 		if (props.id) {
 			_this.image.id = props.id;
 		}
-
-		$('head').append(_this.styles.map(function (styleProps) {
-			return $('<link rel="stylesheet"/>').attr('href', styleProps.href);
-		}));
 		return _this;
 	}
 

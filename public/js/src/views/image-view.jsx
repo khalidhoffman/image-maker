@@ -10,15 +10,10 @@ class ImageView extends React.Component {
 		super(props);
 		this.image = props.image || new Image(props);
 		this.images = props.images || props.children || [];
-		this.styles = props.styles || [];
 
 		if (props.id) {
 			this.image.id = props.id;
 		}
-
-		$('head').append(this.styles.map(styleProps => {
-			return $('<link rel="stylesheet"/>').attr('href', styleProps.href);
-		}))
 	}
 
 	render() {
