@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "preinstall": "mkdir ./public/assets/",
     "start": "node ./bin/www",
     "compile:js": "webpack --display-reasons --config ./webpack.config.js"
   },
@@ -10,7 +11,6 @@
   "dependencies": {
     "body-parser": "~1.17.1",
     "chrome-remote-interface": "^0.23.2",
-    "cookie-parser": "~1.4.3",
     "cors": "^2.8.3",
     "debug": "~2.6.3",
     "dotenv": "^4.0.0",
