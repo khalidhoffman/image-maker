@@ -5,13 +5,12 @@ import ImageView from './views/image-view.jsx';
 import $ from 'jquery'
 
 window.$ = $;
-window.IMAGE_MAKER_API_URL = 'http://localhost:3333';
 
 $(document).ready(function(){
 	const rootEle = document.getElementById('root');
 	const imageId = $('#root').attr('data-image-id');
 
-	request.get(`${IMAGE_MAKER_API_URL}/image/${imageId}/params`)
+	request.get(`/image/${imageId}/params`)
 		.then((response) => {
 			ReactDOM.render(<div>{response.body.map((imageData, idx) => <ImageView key={idx} root={true} {...imageData} />)}</div>, rootEle);
 			$('#root').data('image-maker', response.body);

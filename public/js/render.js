@@ -43212,13 +43212,12 @@ var _jquery2 = _interopRequireDefault(_jquery);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 window.$ = _jquery2.default;
-window.IMAGE_MAKER_API_URL = 'http://localhost:3333';
 
 (0, _jquery2.default)(document).ready(function () {
 	var rootEle = document.getElementById('root');
 	var imageId = (0, _jquery2.default)('#root').attr('data-image-id');
 
-	_superagent2.default.get(IMAGE_MAKER_API_URL + '/image/' + imageId + '/params').then(function (response) {
+	_superagent2.default.get('/image/' + imageId + '/params').then(function (response) {
 		_reactDom2.default.render(_react2.default.createElement(
 			'div',
 			null,
@@ -57973,6 +57972,19 @@ var Image = function () {
         key: 'addChild',
         value: function addChild(image) {
             this.images.push(image);
+        }
+    }, {
+        key: 'toObject',
+        value: function toObject() {
+            return {
+                images: this.images.map(function (image) {
+                    return image.toObject ? image.toObject() : image;
+                }),
+                id: this.id,
+                format: this.format,
+                src: this.src,
+                css: this.css
+            };
         }
     }]);
 
