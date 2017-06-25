@@ -6,6 +6,7 @@
     "start": "node ./bin/www",
     "compile:js": "webpack --display-reasons --config ./webpack.config.js"
   },
+  "main": "app.js",
   "dependencies": {
     "body-parser": "~1.17.1",
     "chrome-remote-interface": "^0.23.2",
