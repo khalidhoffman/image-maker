@@ -9,7 +9,10 @@ const CDPImage = require('../lib/cdp-image');
 
 const log = debug('image-maker:router');
 const router = express.Router();
-const readmeContent = fs.readFileSync('./README.md', 'utf8');
+const pkgName = require('../package.json').name;
+const isModule = process.cwd() !== path.resolve(__dirname, '../');
+const projectDir = isModule ? path.join(process.cwd(), `./node_modules/${pkgName}/`) : process.cwd();
+const readmeContent = fs.readFileSync(path.join(projectDir, './README.md'), 'utf8');
 const readmeHtml = marked(readmeContent);
 const cache = {};
 
@@ -59,7 +62,7 @@ router.get('/image/:imageId/params', (req, res, next) => {
 	const imageId = req.params.imageId.replace(/-.+$/, '');
 	try {
 		res.json(cache[imageId].map(image => image.toObject()));
-	} catch(err){
+	} catch (err) {
 		console.error(err);
 		res.json([{}])
 	}
