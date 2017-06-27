@@ -57935,55 +57935,57 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var Image = function () {
-    function Image(params) {
-        _classCallCheck(this, Image);
+	function Image(params) {
+		var _this = this;
 
-        var defaults = {
-            id: -1,
-            css: {
-                width: 64,
-                height: 64
-            },
-            format: 'png',
-            src: '',
-            images: []
-        };
+		_classCallCheck(this, Image);
 
-        var _Object$assign = Object.assign(defaults, params),
-            id = _Object$assign.id,
-            css = _Object$assign.css,
-            format = _Object$assign.format,
-            src = _Object$assign.src,
-            images = _Object$assign.images;
+		var defaults = {
+			id: -1,
+			css: {
+				width: 64,
+				height: 64
+			},
+			format: 'png',
+			src: '',
+			images: []
+		};
+		var fields = Object.assign(defaults, params);
 
-        this.images = params.children || images;
-        this.id = id;
-        this.format = format;
-        this.src = src;
-        this.css = css;
-    }
+		this.images = params.children || params.images;
 
-    _createClass(Image, [{
-        key: 'addChild',
-        value: function addChild(image) {
-            this.images.push(image);
-        }
-    }, {
-        key: 'toObject',
-        value: function toObject() {
-            return {
-                images: this.images.map(function (image) {
-                    return image.toObject ? image.toObject() : image;
-                }),
-                id: this.id,
-                format: this.format,
-                src: this.src,
-                css: this.css
-            };
-        }
-    }]);
+		Object.keys(fields).forEach(function (fieldName) {
+			switch (fieldName) {
+				case 'children':
+					_this.images = fields[fieldName];
+					break;
+				default:
+					_this[fieldName] = fields[fieldName];
+			}
+		});
+	}
 
-    return Image;
+	_createClass(Image, [{
+		key: 'addChild',
+		value: function addChild(image) {
+			this.images.push(image);
+		}
+	}, {
+		key: 'toObject',
+		value: function toObject() {
+			return {
+				images: this.images.map(function (image) {
+					return image.toObject ? image.toObject() : image;
+				}),
+				id: this.id,
+				format: this.format,
+				src: this.src,
+				css: this.css
+			};
+		}
+	}]);
+
+	return Image;
 }();
 
 module.exports = Image;
