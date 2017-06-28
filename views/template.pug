@@ -3,9 +3,11 @@ html
     head
         title template
         link(rel='stylesheet', href='/styles/template.css')
-        script(src='//cdnjs.cloudflare.com/ajax/libs/es6-shim/0.35.3/es6-shim.js')
+        each image in cache.images
+            if image.styles
+                each style in image.styles
+                    link(rel='stylesheet' href!=style)
         script(src='/js/render.js')
-        each style in styles
-            link(rel='stylesheet' href!=style.href)
+        meta(version=1)
     body(style='position:relative; margin:0; padding: 0;')
         #root(data-image-id=id)

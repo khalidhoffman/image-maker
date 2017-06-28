@@ -5,7 +5,7 @@ const debug = require('debug');
 const express = require('express');
 const marked = require('marked');
 
-const CDPImage = require('../lib/cdp-image');
+const PhantomJsImage = require('../lib/phantomjs-image');
 
 const log = debug('image-maker:router');
 const router = express.Router();
@@ -14,7 +14,7 @@ const isModule = process.cwd() !== path.resolve(__dirname, '../');
 const projectDir = isModule ? path.join(process.cwd(), `./node_modules/${pkgName}/`) : process.cwd();
 const readmeContent = fs.readFileSync(path.join(projectDir, './README.md'), 'utf8');
 const readmeHtml = marked(readmeContent);
-const cache = {};
+const imagesCache = {};
 
 router.get('/', (req, res, next) => {
 	res.render('index', {
@@ -25,29 +25,22 @@ router.get('/', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
 	const imageId = Date.now();
-	let parentImage;
+	let image;
 
-	cache[imageId] = req.body.map((imageParams, idx) => {
-		const image = new CDPImage(Object.assign({id: `${imageId}-${idx}`}, imageParams));
-
-		if (idx === 0) {
-			parentImage = image;
-		} else {
-			parentImage.addChild(image);
-		}
-
-		if (imageParams.styles){
-			image.styles = imageParams.styles;
-		}
-
-		return image;
+	req.body.id = imageId;
+	req.body.images = req.body.images.map((imageParams, idx) => {
+		return Object.assign({id: `${imageId}-${idx}`}, imageParams);
 	});
 
-	return Promise.all(cache[imageId].map(image => image.render()))
-		.then(results => {
-			log(results[0].imgUrl);
-			log(results[0].viewUrl);
-			res.json(results);
+	imagesCache[imageId] = req.body;
+
+	image = new PhantomJsImage(imagesCache[imageId]);
+
+	return image.render()
+		.then(result => {
+			log(result.imgUrl);
+			log(result.viewUrl);
+			res.json(result);
 		})
 		.catch((err) => {
 			log(err.toString());
@@ -58,18 +51,16 @@ router.post('/', (req, res, next) => {
 router.get('/image/:imageId/view', (req, res, next) => {
 	const imageId = req.params.imageId.replace(/-.+$/, '');
 
-	res.render('template', cache[imageId][0]);
+	res.render('template', {
+		cache: imagesCache[imageId],
+		id: imageId
+	});
 });
 
 router.get('/image/:imageId/params', (req, res, next) => {
 	const imageId = req.params.imageId.replace(/-.+$/, '');
-	try {
-		res.json(cache[imageId].map(image => image.toObject()));
-	} catch (err) {
-		console.error(err);
-		res.json([{}])
-	}
 
+	res.json(imagesCache[imageId]);
 });
 
 module.exports = router;
