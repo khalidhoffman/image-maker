@@ -1,10 +1,11 @@
-import HTML from 'chart.js';
 import View from './view';
 
 class HTMLView extends View {
-	render(){
-		this.$view.css(this.props.css);
-                this.$view.html(this.props.html);
+	render() {
+		if (this.props.css) {
+			this.$view.css(this.props.css);
+		}
+		this.$view.html(this.props.html);
 	}
 }
 

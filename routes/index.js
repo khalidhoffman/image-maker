@@ -38,8 +38,7 @@ router.post('/', (req, res, next) => {
 
 	return image.render()
 		.then(result => {
-			log(result.imgUrl);
-			log(result.viewUrl);
+			log(result);
 			res.json(result);
 		})
 		.catch((err) => {
@@ -48,19 +47,17 @@ router.post('/', (req, res, next) => {
 		});
 });
 
-router.get('/image/:imageId/view', (req, res, next) => {
-	const imageId = req.params.imageId.replace(/-.+$/, '');
+router.get('/image/view', (req, res, next) => {
+	const cache = (function(){
+		try {
+			return JSON.parse(decodeURIComponent(req.query.data));
+		} catch (err) {
+			return {}
+		}
+	})();
+	const id = `${cache.id || 'output'}-${Date.now()}`;
 
-	res.render('template', {
-		cache: imagesCache[imageId],
-		id: imageId
-	});
-});
-
-router.get('/image/:imageId/params', (req, res, next) => {
-	const imageId = req.params.imageId.replace(/-.+$/, '');
-
-	res.json(imagesCache[imageId]);
+	res.render('template', {cache, id});
 });
 
 module.exports = router;

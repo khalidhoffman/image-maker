@@ -1,18 +1,17 @@
 import $ from 'jquery';
-import _ from 'lodash';
 
 class View {
-	constructor (props){
+	constructor(props) {
 		this.$ = $;
 		this.$root = $('#root');
 		this.$view = $('<div></div>');
 		this.props = props;
-                
+
 		this.$view.attr({'id': this.props.id});
 
-                if (this.props.className){
-                    this.$view.addClass(this.props.className);
-                }
+		if (this.props.className) {
+			this.$view.addClass(this.props.className);
+		}
 
 		this.$root.append(this.$view);
 	}
